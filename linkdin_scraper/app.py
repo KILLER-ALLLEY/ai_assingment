@@ -6,7 +6,7 @@ import time
 app = Flask(__name__)
 CORS(app)
 
-# HTML Template (same as before)
+
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="en">
@@ -176,7 +176,7 @@ def scrape_profile(url, page):
     page.goto(url)
     time.sleep(3)
 
-    # EXACT SAME SCRAPING LOGIC AS YOUR ORIGINAL CODE
+    
     try:
         name = page.locator("h1").first.inner_text() if page.locator("h1").count() else "N/A"
     except:
@@ -225,7 +225,7 @@ def scrape_profiles():
     
     try:
         with sync_playwright() as playwright:
-            # EXACT SAME BROWSER SETUP AS YOUR ORIGINAL CODE
+            
             browser = playwright.chromium.launch(headless=True, slow_mo=200)
             context = browser.new_context(
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
@@ -237,7 +237,7 @@ def scrape_profiles():
             )
             page = context.new_page()
 
-            # EXACT SAME LOGIN AS YOUR ORIGINAL CODE
+            
             page.goto("https://www.linkedin.com/login")
             page.wait_for_load_state("networkidle")
             page.get_by_label("Email or Phone").fill(email)
@@ -245,7 +245,7 @@ def scrape_profiles():
             page.get_by_role("button", name="Sign in", exact=True).click()
             time.sleep(5)
 
-            # Scrape each profile using YOUR EXACT METHOD
+            
             for url in urls:
                 try:
                     profile_data = scrape_profile(url, page)
