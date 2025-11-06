@@ -103,4 +103,6 @@ public/packs/
 public/packs-test/
 public/system/
 
-C:\ai_assingment\autodialer\.kamal\secrets
+# Kamal secrets folder
+.kamal/secrets/
+.github/
