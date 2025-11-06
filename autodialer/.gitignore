@@ -1,0 +1,32 @@
+# Environment and secrets
+.env
+/config/master.key
+/config/credentials/*.key
+
+# Logs and temp files
+/log/*
+!/log/.keep
+/tmp/*
+!/tmp/.keep
+
+# Uploaded files (Active Storage)
+ /storage/*
+!/storage/.keep
+
+# Vendor
+/vendor/
+
+# Ignore SQLite (in case created by accident)
+db/*.sqlite3
+db/*.sqlite3-journal
+
+# Node modules (if you add JS tooling)
+node_modules/
+
+# Byebug, IRB history
+.byebug_history
+.irb_history
+
+
+/coverage/
+/.DS_Store

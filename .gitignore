@@ -1,0 +1,106 @@
+# ============================================================
+# 🌐 UNIVERSAL IGNORE
+# ============================================================
+
+# OS / Editor junk
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.bak
+*.log
+.idea/
+.vscode/
+
+# Environment & secrets
+.env
+*.env
+*.key
+*.pem
+
+# ============================================================
+# 💎 RUBY ON RAILS (Autodialer)
+# ============================================================
+
+# Rails secrets and temp files
+/config/master.key
+/config/credentials/*.key
+/log/*
+!/log/.keep
+/tmp/*
+!/tmp/.keep
+/storage/*
+!/storage/.keep
+
+# Node / frontend assets (if any)
+node_modules/
+
+# Vendor gems and dependencies
+/vendor/
+
+# Cache, schema dumps
+/db/*.sqlite3
+/db/*.sqlite3-journal
+
+# Local-only schemas (safe to regenerate)
+db/cache_schema.yml
+db/queue_schema.yml
+db/cable_schema.yml
+db/schema.rb
+
+# System artifacts
+.byebug_history
+
+# ============================================================
+# 🐍 PYTHON (LinkedIn Scraper)
+# ============================================================
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Python cache and build artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+build/
+dist/
+.eggs/
+.mypy_cache/
+.pytest_cache/
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# Temporary or local files
+*.log
+*.tmp
+*.bak
+
+# ============================================================
+# 📦 PROJECT LEVEL
+# ============================================================
+
+# Coverage, test outputs
+coverage/
+htmlcov/
+test-results/
+
+# Local files / system data
+*.sqlite
+*.db
+*.csv
+*.json
+
+# Ignore everything under /public if generated content
+/public/uploads/
+public/assets/
+public/packs/
+public/packs-test/
+public/system/
+
+C:\ai_assingment\autodialer\.kamal\secrets

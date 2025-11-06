@@ -1,0 +1,20 @@
+<h1>Add New Contact</h1>
+
+<%= form_with model: @contact, local: true do |form| %>
+  <p>
+    <%= form.label :name %><br>
+    <%= form.text_field :name %>
+  </p>
+
+  <p>
+    <%= form.label :phone %><br>
+    <%= form.text_field :phone %>
+  </p>
+
+  <p>
+    <%= form.submit "Save Contact" %>
+  </p>
+<% end %>
+
+<br>
+<%= link_to "Back to Contacts", contacts_path %>

@@ -1,0 +1,141 @@
+<% content_for :title, "Blogs" %>
+
+<!-- Success Notice -->
+<% if notice %>
+  <div style="position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); color: #2d3748; padding: 15px 25px; border-radius: 10px; box-shadow: 0 10px 30px rgba(132, 250, 176, 0.4); z-index: 1000; font-weight: 600; animation: slideIn 0.5s ease;">
+    ✅ <%= notice %>
+  </div>
+<% end %>
+
+<div class="container" style="max-width: 900px; margin: 0 auto; padding: 40px 20px 140px 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  
+  <!-- Header -->
+  <div style="text-align: center; margin-bottom: 50px;">
+    <h1 style="font-size: 3.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 15px; font-weight: 800;">
+      ✨ All Blogs
+    </h1>
+    <p style="color: #718096; font-size: 1.2rem; max-width: 600px; margin: 0 auto;">
+      Discover insights, stories, and knowledge
+    </p>
+  </div>
+
+  <!-- Blogs Grid -->
+  <div id="blogs">
+    <% if @blogs.any? %>
+      <% @blogs.each_with_index do |blog, index| %>
+        <div class="blog-card" style="background: white; border-radius: 20px; padding: 35px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); transition: all 0.3s; border: 2px solid transparent; position: relative; overflow: hidden;">
+          
+          <!-- Decorative gradient bar -->
+          <div style="position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);"></div>
+          
+          <!-- Blog Number Badge -->
+          <div style="position: absolute; top: 20px; right: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);">
+            <%= index + 1 %>
+          </div>
+          
+          <h2 style="margin-bottom: 15px; margin-top: 0;">
+            <%= link_to blog.title, blog, style: "color: #2d3748; text-decoration: none; font-size: 1.8rem; font-weight: 700; transition: color 0.3s;" %>
+          </h2>
+          
+          <p style="color: #4a5568; line-height: 1.7; font-size: 1.05rem; margin-bottom: 25px;">
+            <%= truncate(blog.content, length: 200) %>
+          </p>
+          
+          <!-- Action Buttons -->
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <%= link_to "👁️ View", blog, style: "padding: 10px 22px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; transition: all 0.3s; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); display: inline-block;" %>
+            
+            <%= link_to "✏️ Edit", edit_blog_path(blog), style: "padding: 10px 22px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; transition: all 0.3s; box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3); display: inline-block;" %>
+            
+            <%= link_to "🗑️ Delete", blog, data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, style: "padding: 10px 22px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: #2d3748; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; transition: all 0.3s; box-shadow: 0 4px 15px rgba(250, 112, 154, 0.3); display: inline-block;" %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <!-- Empty State -->
+      <div style="text-align: center; padding: 80px 20px; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.08);">
+        <div style="font-size: 5rem; margin-bottom: 20px;">📝</div>
+        <h3 style="color: #2d3748; margin-bottom: 15px; font-size: 1.8rem;">No Blogs Yet</h3>
+        <p style="color: #718096; font-size: 1.1rem; margin-bottom: 30px;">
+          Start creating amazing content today!
+        </p>
+        <%= link_to "✨ Create Your First Blog", new_blog_path, style: "padding: 15px 35px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: 1.1rem; display: inline-block; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4); transition: all 0.3s;" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- New Blog Button (Fixed for when blogs exist) -->
+  <% if @blogs.any? %>
+    <div style="text-align: center; margin-top: 40px;">
+      <%= link_to "➕ Create New Blog", new_blog_path, style: "padding: 15px 35px; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: 1.1rem; display: inline-block; box-shadow: 0 8px 25px rgba(17, 153, 142, 0.4); transition: all 0.3s;" %>
+    </div>
+  <% end %>
+
+</div>
+
+<!-- Floating AI Chat Bar -->
+<div style="position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(to right, #667eea 0%, #764ba2 100%); backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.1); padding: 20px 30px; box-shadow: 0 -10px 40px rgba(0,0,0,0.15); z-index: 999;">
+  <%= form_with url: generate_ai_blogs_path, method: :post, local: true, style: "max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;" do |form| %>
+    
+    <div style="flex: 1; min-width: 300px; position: relative;">
+      <div style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); font-size: 1.5rem;">
+        🤖
+      </div>
+      <%= form.text_field :titles, placeholder: "Ask AI to generate a blog... (e.g., 'Write about Ruby on Rails best practices')", style: "width: 100%; padding: 16px 16px 16px 50px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.98); font-size: 1.05rem; color: #2d3748; font-weight: 500; transition: all 0.3s;" %>
+    </div>
+    
+    <%= form.submit "✨ Generate with AI", style: "padding: 16px 35px; background: white; color: #667eea; border: none; border-radius: 12px; font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 20px rgba(0,0,0,0.2); white-space: nowrap;" %>
+    
+  <% end %>
+</div>
+
+<style>
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  .blog-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    border-color: #667eea;
+  }
+  
+  .blog-card h2 a:hover {
+    color: #667eea;
+  }
+  
+  a[href*="blog"]:hover,
+  button:hover,
+  input[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+  }
+  
+  input[type="text"]:focus {
+    outline: none;
+    border-color: white;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
+  }
+  
+  @media (max-width: 768px) {
+    .blog-card {
+      padding: 25px !important;
+    }
+    
+    h1 {
+      font-size: 2.5rem !important;
+    }
+    
+    .blog-card h2 a {
+      font-size: 1.4rem !important;
+    }
+  }
+</style>

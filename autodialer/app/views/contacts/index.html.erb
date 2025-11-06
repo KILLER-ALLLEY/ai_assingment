@@ -1,0 +1,186 @@
+<div class="container" style="max-width: 1200px; margin: 0 auto; padding: 40px 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  
+  <!-- Header -->
+  <div style="text-align: center; margin-bottom: 40px;">
+    <h1 style="font-size: 2.5rem; color: #1a202c; margin-bottom: 10px;">📞 Contacts</h1>
+    <p style="color: #718096; font-size: 1.1rem;">Manage your contact list and autodialer</p>
+  </div>
+
+  <!-- Upload Section -->
+  <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);">
+    <%= form_with url: upload_contacts_path, local: true, multipart: true do |form| %>
+      <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+        <label style="color: white; font-weight: 600; font-size: 1.1rem;">📤 Upload CSV:</label>
+        <%= form.file_field :file, style: "flex: 1; min-width: 250px; padding: 12px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.95); font-size: 1rem;" %>
+        <%= form.submit "Upload Contacts", style: "padding: 12px 30px; background: white; color: #667eea; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s;" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Action Buttons -->
+  <div style="display: flex; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; justify-content: center;">
+    <%= button_to "🚀 Autodial All Contacts", autodial_contacts_path, method: :post, data: { confirm: "Start autodialing all contacts?" }, style: "padding: 15px 30px; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 1rem; box-shadow: 0 5px 20px rgba(17, 153, 142, 0.4); transition: all 0.3s;" %>
+    <%= button_to "🔄 Reset All Contacts", reset_contacts_path, method: :delete, data: { confirm: "Are you sure you want to clear all contacts?" }, style: "padding: 15px 30px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 1rem; box-shadow: 0 5px 20px rgba(245, 87, 108, 0.4); transition: all 0.3s;" %>
+    <%= button_to "🗑️ Reset Call Logs", reset_logs_calls_path, method: :delete, data: { confirm: "Clear all call logs?" }, style: "padding: 15px 30px; background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); color: #2d3748; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 1rem; box-shadow: 0 5px 20px rgba(166, 193, 238, 0.4); transition: all 0.3s;" %>
+  </div>
+
+  <!-- Contacts Table -->
+  <div style="background: white; border-radius: 16px; padding: 30px; margin-bottom: 40px; box-shadow: 0 5px 25px rgba(0,0,0,0.08);">
+    <h2 style="color: #2d3748; margin-bottom: 20px; font-size: 1.8rem;">👥 Contact List</h2>
+    <div style="overflow-x: auto; overflow-y: auto; max-height: 420px;">
+      <table style="width: 100%; border-collapse: separate; border-spacing: 0;">
+        <thead>
+          <tr style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <th style="padding: 15px; text-align: left; color: white; font-weight: 600; border-top-left-radius: 10px;">Name</th>
+            <th style="padding: 15px; text-align: left; color: white; font-weight: 600;">Phone</th>
+            <th style="padding: 15px; text-align: left; color: white; font-weight: 600;">Status</th>
+            <th style="padding: 15px; text-align: center; color: white; font-weight: 600; border-top-right-radius: 10px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @contacts.each_with_index do |contact, index| %>
+            <tr style="background: <%= index.even? ? '#f7fafc' : 'white' %>; transition: background 0.2s;">
+              <td style="padding: 15px; border-bottom: 1px solid #e2e8f0; color: #2d3748; font-weight: 500;"><%= contact.name %></td>
+              <td style="padding: 15px; border-bottom: 1px solid #e2e8f0; color: #4a5568;"><%= contact.phone %></td>
+              <td style="padding: 15px; border-bottom: 1px solid #e2e8f0;">
+                <span style="padding: 6px 14px; background: <%= contact.status == 'completed' ? '#c6f6d5' : '#fed7d7' %>; color: <%= contact.status == 'completed' ? '#22543d' : '#742a2a' %>; border-radius: 20px; font-size: 0.9rem; font-weight: 600;">
+                  <%= contact.status %>
+                </span>
+              </td>
+              <td style="padding: 15px; border-bottom: 1px solid #e2e8f0; text-align: center;">
+                <%= button_to "📞 Call", calls_path(phone: contact.phone), method: :post, style: "padding: 8px 20px; background: #667eea; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9rem; transition: all 0.2s;" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Call Logs -->
+  <div style="background: white; border-radius: 16px; padding: 30px; margin-bottom: 40px; box-shadow: 0 5px 25px rgba(0,0,0,0.08);">
+    <h2 style="color: #2d3748; margin-bottom: 20px; font-size: 1.8rem;">📋 Recent Call Logs</h2>
+    <% if defined?(CallLog) && CallLog.any? %>
+      <div style="overflow-x: auto; overflow-y: auto; max-height: 320px;">
+        <table style="width: 100%; border-collapse: separate; border-spacing: 0;">
+          <thead>
+            <tr style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+              <th style="padding: 15px; text-align: left; color: white; font-weight: 600; border-top-left-radius: 10px;">Phone Number</th>
+              <th style="padding: 15px; text-align: left; color: white; font-weight: 600;">Status</th>
+              <th style="padding: 15px; text-align: left; color: white; font-weight: 600;">Message</th>
+              <th style="padding: 15px; text-align: left; color: white; font-weight: 600;">SID</th>
+              <th style="padding: 15px; text-align: left; color: white; font-weight: 600; border-top-right-radius: 10px;">Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% CallLog.order(created_at: :desc).limit(10).each_with_index do |log, index| %>
+              <tr style="background: <%= index.even? ? '#f7fafc' : 'white' %>;">
+                <td style="padding: 15px; border-bottom: 1px solid #e2e8f0; color: #2d3748; font-weight: 500;"><%= log.phone_number %></td>
+                <td style="padding: 15px; border-bottom: 1px solid #e2e8f0; color: #4a5568;"><%= log.status %></td>
+                <td style="padding: 15px; border-bottom: 1px solid #e2e8f0; color: #718096;"><%= log.message %></td>
+                <td style="padding: 15px; border-bottom: 1px solid #e2e8f0; color: #a0aec0; font-size: 0.9rem;"><%= log.sid.presence || "-" %></td>
+                <td style="padding: 15px; border-bottom: 1px solid #e2e8f0; color: #4a5568; font-size: 0.9rem;"><%= log.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <p style="text-align: center; color: #a0aec0; font-size: 1.1rem; padding: 40px;">No call logs yet.</p>
+    <% end %>
+  </div>
+
+  <!-- Bottom Actions -->
+  <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 100px;">
+    <%= link_to "➕ Add New Contact", new_contact_path, style: "padding: 15px 35px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 10px; font-weight: 600; font-size: 1rem; box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4); transition: all 0.3s; display: inline-block;" %>
+    <%= link_to "🧠 Go to Blogs Section", blogs_path, style: "padding: 15px 35px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: #2d3748; text-decoration: none; border-radius: 10px; font-weight: 600; font-size: 1rem; box-shadow: 0 5px 20px rgba(250, 112, 154, 0.4); transition: all 0.3s; display: inline-block;" %>
+  </div>
+
+</div>
+
+<!-- AI Command Box -->
+<div id="ai-box" style="position: fixed; bottom: 30px; right: 30px; width: 380px; background: white; border-radius: 20px; padding: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); z-index: 999; border: 1px solid #e2e8f0;">
+  <h4 style="margin: 0 0 15px 0; color: #2d3748; font-size: 1.3rem; display: flex; align-items: center; gap: 10px;">
+    🤖 <span>AI Command</span>
+  </h4>
+  <input type="text" id="ai-input" placeholder="Type a command... (e.g., call 98765)" style="width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; transition: border 0.3s; margin-bottom: 12px;">
+  <button id="ai-send" style="width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);">Send Command</button>
+  <p id="ai-response" style="font-size: 0.95rem; margin-top: 12px; color: #4a5568; min-height: 20px; padding: 10px; background: #f7fafc; border-radius: 8px; border-left: 4px solid #667eea;"></p>
+</div>
+
+<script>
+document.getElementById("ai-send").addEventListener("click", async () => {
+  const prompt = document.getElementById("ai-input").value.trim();
+  const responseEl = document.getElementById("ai-response");
+  
+  responseEl.innerText = "Processing...";
+  
+  const formData = new FormData();
+  formData.append("prompt", prompt);
+  
+  try {
+    const res = await fetch("/ai/command", {
+      method: "POST",
+      body: formData
+    });
+    
+    const data = await res.json();
+    responseEl.innerText = data.message || data.error || "No response";
+  } catch (error) {
+    responseEl.innerText = "Error: " + error.message;
+  }
+});
+
+document.getElementById("ai-input").addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    document.getElementById("ai-send").click();
+  }
+});
+</script>
+
+<style>
+  #ai-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+  
+  #ai-send:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  }
+  
+  table tbody tr:hover {
+    background: #edf2f7 !important;
+  }
+  
+  button:hover {
+    transform: translateY(-2px);
+  }
+  
+  a:hover {
+    transform: translateY(-2px);
+  }
+
+  /* make table header stick to top of scroll area */
+  table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+  }
+
+  /* keep table layout stable when tbody becomes scrollable */
+  table { table-layout: fixed; }
+  table td, table th { word-wrap: break-word; }
+
+  /* subtle shadow for sticky header */
+  table thead th { box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+
+  /* responsive tweaks */
+  @media (max-width: 640px) {
+    .container { padding: 20px 12px; }
+    #ai-box { width: calc(100% - 40px); right: 20px; left: 20px; bottom: 20px; }
+  }
+</style>

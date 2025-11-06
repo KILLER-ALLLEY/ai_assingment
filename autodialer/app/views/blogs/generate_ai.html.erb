@@ -1,0 +1,15 @@
+<h2>Generate Blogs with AI</h2>
+
+<%= form_with url: generate_ai_blogs_path, method: :post, local: true do |form| %>
+  <div>
+    <%= form.label :titles, "Enter blog titles (one per line):" %><br>
+    <%= form.text_area :titles, rows: 8, cols: 70, placeholder: "e.g.\nIntro to Machine Learning\nRuby on Rails Basics\nUnderstanding APIs" %>
+  </div>
+
+  <br>
+  <%= form.submit "Generate with AI", class: "btn btn-primary" %>
+<% end %>
+
+<hr>
+
+<%= link_to "Back to All Blogs", blogs_path %>
