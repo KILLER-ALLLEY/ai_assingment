@@ -1,6 +1,6 @@
 # config/initializers/solid_queue.rb
+# Force SolidQueue to use the primary ActiveRecord database in production
+
 if defined?(SolidQueue)
-  SolidQueue::Engine.configure do
-    config.active_record.database = :primary
-  end
+  SolidQueue::Record.connects_to database: { writing: :primary }
 end
