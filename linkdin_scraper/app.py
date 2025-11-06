@@ -64,7 +64,12 @@ https://www.linkedin.com/in/username3/"></textarea>
         </div>
 
         <div id="results" class="bg-white rounded-lg shadow-lg p-6 hidden">
-            <h2 class="text-xl font-semibold mb-4">✅ Results (<span id="resultCount">0</span>)</h2>
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold">✅ Results (<span id="resultCount">0</span>)</h2>
+                <button id="copyBtn" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                    📋 Copy All Data
+                </button>
+            </div>
             <div id="resultsContainer" class="space-y-4 max-h-[600px] overflow-y-auto"></div>
         </div>
     </div>
@@ -78,6 +83,9 @@ https://www.linkedin.com/in/username3/"></textarea>
         const resultCount = document.getElementById('resultCount');
         const loading = document.getElementById('loading');
         const errorMsg = document.getElementById('errorMsg');
+        const copyBtn = document.getElementById('copyBtn');
+        
+        let scrapedData = [];
 
         urlsTextarea.addEventListener('input', () => {
             const urls = urlsTextarea.value.split('\\n').filter(u => u.trim());
@@ -106,6 +114,7 @@ https://www.linkedin.com/in/username3/"></textarea>
             loading.classList.remove('hidden');
             resultsDiv.classList.add('hidden');
             resultsContainer.innerHTML = '';
+            scrapedData = [];
 
             try {
                 const response = await fetch('/scrape', {
@@ -123,6 +132,7 @@ https://www.linkedin.com/in/username3/"></textarea>
                 loading.classList.add('hidden');
                 resultsDiv.classList.remove('hidden');
                 resultCount.textContent = data.results.length;
+                scrapedData = data.results;
 
                 data.results.forEach((result, index) => {
                     const card = document.createElement('div');
@@ -159,6 +169,31 @@ https://www.linkedin.com/in/username3/"></textarea>
 
             scrapeBtn.disabled = false;
             scrapeBtn.textContent = 'Start Scraping';
+        });
+
+        copyBtn.addEventListener('click', () => {
+            let output = '';
+            scrapedData.forEach((result, index) => {
+                if (result.status === 'success') {
+                    output += `Profile ${index + 1}:\\n`;
+                    output += `Name: ${result.name}\\n`;
+                    output += `Headline: ${result.headline}\\n`;
+                    output += `Location: ${result.location}\\n`;
+                    output += `URL: ${result.url}\\n`;
+                    output += `\\n${'='.repeat(60)}\\n\\n`;
+                }
+            });
+            
+            navigator.clipboard.writeText(output).then(() => {
+                copyBtn.textContent = '✓ Copied!';
+                copyBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                copyBtn.classList.add('bg-green-700');
+                setTimeout(() => {
+                    copyBtn.textContent = '📋 Copy All Data';
+                    copyBtn.classList.remove('bg-green-700');
+                    copyBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+                }, 2000);
+            });
         });
 
         function showError(message) {
@@ -273,3 +308,4 @@ if __name__ == '__main__':
     print("📍 Open your browser and go to: http://localhost:5000")
     print("="*50)
     app.run(debug=True, port=5000, host='0.0.0.0')
+
