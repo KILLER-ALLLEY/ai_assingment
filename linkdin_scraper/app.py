@@ -226,7 +226,7 @@ def scrape_profiles():
     try:
         with sync_playwright() as playwright:
             # EXACT SAME BROWSER SETUP AS YOUR ORIGINAL CODE
-            browser = playwright.chromium.launch(headless=False, slow_mo=200)
+            browser = playwright.chromium.launch(headless=True, slow_mo=200)
             context = browser.new_context(
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
                 extra_http_headers={
