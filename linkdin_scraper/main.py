@@ -19,8 +19,8 @@ def run(playwright: Playwright):
     page.wait_for_load_state("networkidle")
 
     # Step 2: Fill your credentials (replace these)
-    page.get_by_label("Email or Phone").fill("YOUR_EMAIL")
-    page.get_by_label("Password").fill("#YOUR_PASSWORD")
+    page.get_by_label("Email or Phone").fill("2srinath262003@gmail.com")
+    page.get_by_label("Password").fill("#Srinath123")
     page.get_by_role("button", name="Sign in", exact=True).click()
 
     # Step 3: Wait for login to complete
